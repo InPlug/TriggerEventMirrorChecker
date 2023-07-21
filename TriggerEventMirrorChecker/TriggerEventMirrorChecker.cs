@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Reflection;
 using Vishnu.Interchange;
-using NetEti.Globals;
+using System.ComponentModel;
 
-namespace Vishnu.Demos
+namespace TriggerEventMirrorChecker
 {
     /// <summary>
     /// Spiegelt die Ergebnisse eines anderen Vishnu-Knoten.
@@ -17,12 +17,12 @@ namespace Vishnu.Demos
         /// des Checkers geändert hat, muss aber zumindest aber einmal zum
         /// Schluss der Verarbeitung aufgerufen werden.
         /// </summary>
-        public event CommonProgressChangedEventHandler NodeProgressChanged;
+        public event ProgressChangedEventHandler? NodeProgressChanged;
 
         /// <summary>
         /// Rückgabe-Objekt des Checkers
         /// </summary>
-        public object ReturnObject
+        public object? ReturnObject
         {
             get
             {
@@ -44,19 +44,19 @@ namespace Vishnu.Demos
         /// <param name="treeParameters">Für den gesamten Tree gültige Parameter oder null.</param>
         /// <param name="source">Auslösendes TreeEvent oder null.</param>
         /// <returns>True, False oder null</returns>
-        public bool? Run(object checkerParameters, TreeParameters treeParameters, TreeEvent source)
+        public bool? Run(object? checkerParameters, TreeParameters treeParameters, TreeEvent source)
         {
             this.publish(String.Format($"{source.SourceId}, {source.Logical.ToString()}, {source.SenderId}"));
             this.ReturnObject = null;
             bool? logicalResult = null;
-            this.OnNodeProgressChanged(this.GetType().Name, 100, 0, ItemsTypes.items);
+            this.OnNodeProgressChanged(0);
             if (source != null)
             {
                 //this.ReturnObject = null;
                 this.ReturnObject = logicalResult.ToString() + " (" + source.NodePath + ")";
                 if (source.Results != null && source.Results.Count > 0)
                 {
-                    foreach (Result result in source.Results.Values)
+                    foreach (Result? result in source.Results.Values)
                     {
                         if (result != null)
                         {
@@ -66,8 +66,8 @@ namespace Vishnu.Demos
                             //}
                             if (result.ReturnObject is Exception)
                             {
-                                this.OnNodeProgressChanged(this.GetType().Name, 100, 100, ItemsTypes.items);
-                                throw result.ReturnObject as Exception;
+                                this.OnNodeProgressChanged(100);
+                                throw (Exception)result.ReturnObject;
                             }
                             //this.ReturnObject = result.ReturnObject;
                         }
@@ -76,21 +76,18 @@ namespace Vishnu.Demos
                 //Thread.Sleep(10);
                 logicalResult = source.Logical;
             }
-            this.OnNodeProgressChanged(this.GetType().Name, 100, 100, ItemsTypes.items);
+            this.OnNodeProgressChanged(100);
             return logicalResult;
         }
 
         #endregion INodeChecker implementation
 
-        private object _returnObject;
+        private object? _returnObject;
 
 
-        private void OnNodeProgressChanged(string itemsName, int countAll, int countSucceeded, ItemsTypes itemsType)
+        private void OnNodeProgressChanged(int progressPercentage)
         {
-            if (NodeProgressChanged != null)
-            {
-                NodeProgressChanged(null, new CommonProgressChangedEventArgs(itemsName, countAll, countSucceeded, itemsType, null));
-            }
+            NodeProgressChanged?.Invoke(null, new ProgressChangedEventArgs(progressPercentage, null));
         }
 
         private void publish(string message)

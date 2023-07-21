@@ -1,15 +1,13 @@
-﻿using NetEti.Globals;
-using System;
-using System.Threading;
+﻿using System.ComponentModel;
 using Vishnu.Interchange;
 
-namespace Vishnu.Demos
+namespace TriggerEventMirrorCheckerDemo
 {
-    class Program
+    internal class Program
     {
         static void Main(string[] args)
         {
-            TriggerEventMirrorChecker triggerEventMirrorChecker = new TriggerEventMirrorChecker();
+            TriggerEventMirrorChecker.TriggerEventMirrorChecker triggerEventMirrorChecker = new();
             triggerEventMirrorChecker.NodeProgressChanged += Program.CheckerProgressChanged;
 
             Console.WriteLine("Ende mit irgendeiner Taste");
@@ -44,9 +42,9 @@ namespace Vishnu.Demos
         /// </summary>
         /// <param name="sender">Der Checker.</param>
         /// <param name="args">Argumente mit Progress-Fortschritt.</param>
-        static void CheckerProgressChanged(object sender, CommonProgressChangedEventArgs args)
+        static void CheckerProgressChanged(object? sender, ProgressChangedEventArgs args)
         {
-            Console.WriteLine(String.Format("{0} von {1} = {2} %", args.CountSucceeded, args.CountAll, args.ProgressPercentage));
+            Console.WriteLine(args.ProgressPercentage);
             checkBreak();
         }
 
@@ -62,6 +60,5 @@ namespace Vishnu.Demos
                 //}
             }
         }
-
     }
 }
