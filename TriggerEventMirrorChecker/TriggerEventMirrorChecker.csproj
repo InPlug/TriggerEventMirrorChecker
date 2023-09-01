@@ -12,8 +12,8 @@
     <Company>NetEti</Company>
     <Copyright>Copyright © $(Authors) 2015-2023</Copyright>
     <PackageTags>NetEti Vishnu Plugin Trigger Event Mirror Checker</PackageTags>
-    <AssemblyVersion>7.0.1.1</AssemblyVersion>
-    <FileVersion>7.0.1.1</FileVersion>
+    <AssemblyVersion>7.0.1.2</AssemblyVersion>
+    <FileVersion>7.0.1.2</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup>

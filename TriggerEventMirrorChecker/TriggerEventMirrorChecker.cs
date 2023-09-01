@@ -56,6 +56,16 @@ namespace TriggerEventMirrorChecker
                 this.ReturnObject = logicalResult.ToString() + " (" + source.NodePath + ")";
                 if (source.Results != null && source.Results.Count > 0)
                 {
+                    // 29.08.2023 Nagel+
+                    if (source.Results.TryGetValue(source.SourceId, out Result? result)
+                        && result != null && result.ReturnObject is Exception)
+                    {
+                        this.OnNodeProgressChanged(100);
+                        throw (Exception)result.ReturnObject;
+                    }
+                    // 29.08.2023 Nagel-
+
+                    /* 29.08.2023 Nagel+ auskommentiert
                     foreach (Result? result in source.Results.Values)
                     {
                         if (result != null)
@@ -72,6 +82,7 @@ namespace TriggerEventMirrorChecker
                             //this.ReturnObject = result.ReturnObject;
                         }
                     }
+                    */ // 29.08.2023 Nagel-
                 }
                 //Thread.Sleep(10);
                 logicalResult = source.Logical;
