@@ -10,7 +10,7 @@
     <Description>$(AssemblyName) - Vishnu-Plugin: Bildet das Verhalten eines anderen Knoten nach dessen Events nach</Description>
     <Authors>Erik Nagel</Authors>
     <Company>NetEti</Company>
-    <Copyright>Copyright © $(Authors) 2015-2023</Copyright>
+    <Copyright>Copyright © $(Authors) 2015-$([System.DateTime]::Now.Year)</Copyright>
     <PackageTags>NetEti Vishnu Plugin Trigger Event Mirror Checker</PackageTags>
     <AssemblyVersion>8.0.0.0</AssemblyVersion>
     <FileVersion>8.0.0.0</FileVersion>
